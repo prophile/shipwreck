@@ -16,7 +16,7 @@ build/constants.json: constants.json
 build/style.css: obj/deps/bootstrap.css
 	cat $^ > $@
 
-build/wreck.js: obj/deps/jquery.js obj/deps/bootstrap.js obj/deps/bacon.js $(MODULES:%=obj/scripts/%.js)
+build/wreck.js: obj/deps/jquery.js obj/deps/bootstrap.js obj/deps/bacon.js obj/deps/underscore.js $(MODULES:%=obj/scripts/%.js)
 	@mkdir -p build
 ifeq ($(MODE),debug)
 	cat $^ > $@
@@ -34,6 +34,9 @@ obj/scripts: Makefile
 
 obj/deps: Makefile
 	mkdir -p $@
+
+obj/deps/underscore.js: obj/deps
+	curl -o $@ 'http://underscorejs.org/underscore-min.js'
 
 obj/deps/bacon.js: obj/deps
 	curl -o $@ 'https://raw.github.com/raimohanska/bacon.js/master/dist/Bacon.js'
