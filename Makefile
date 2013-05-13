@@ -1,5 +1,5 @@
 TO=nowhere
-MODULES=hello constants
+MODULES=hello constants gamestate
 MODE=debug
 
 all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json
