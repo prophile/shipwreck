@@ -1,5 +1,6 @@
 TO=nowhere
 MODULES=hello constants
+MODE=debug
 
 all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json
 
@@ -17,7 +18,11 @@ build/style.css: obj/deps/bootstrap.css
 
 build/wreck.js: obj/deps/jquery.js obj/deps/bootstrap.js obj/deps/bacon.js $(MODULES:%=obj/scripts/%.js)
 	@mkdir -p build
+ifeq ($(MODE),debug)
+	cat $^ > $@
+else
 	uglifyjs -o $@ -m -c --screw-ie8 $^
+endif
 
 obj/scripts/%.js: src/%.coffee obj/scripts
 	coffee --print $< > $@
