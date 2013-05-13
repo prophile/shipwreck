@@ -1,12 +1,29 @@
 TO=nowhere
+MODULES=hello
 
-all: build/index.html build/shipwreck-version
+all: build/index.html build/shipwreck-version build/wreck.js build/style.css
 
 ready: all deps
 
+serve:
+	@cd build ; python3 -m http.server 51428
+
+build/style.css: obj/deps/bootstrap.css
+	cat $^ > $@
+
+build/wreck.js: obj/deps/jquery.js obj/deps/bootstrap.js obj/deps/bacon.js $(MODULES:%=obj/scripts/%.js)
+	@mkdir -p build
+	uglifyjs -o $@ -m -c --screw-ie8 $^
+
+obj/scripts/%.js: src/%.coffee obj/scripts
+	coffee --print $< > $@
+
 deps: obj/deps/bacon.js obj/deps/bootstrap.js obj/deps/jquery.js obj/deps/bootstrap.css
 
-obj/deps:
+obj/scripts: Makefile
+	mkdir -p $@
+
+obj/deps: Makefile
 	mkdir -p $@
 
 obj/deps/bacon.js: obj/deps
@@ -25,10 +42,12 @@ obj/deps/jquery.js: obj/deps
 	curl -o $@ 'http://code.jquery.com/jquery-2.0.0.min.js'
 
 build/shipwreck-version:
+	@mkdir -p build
 	git describe --always > $@
 
-build/index.html:
-	touch $@
+build/index.html: index.html
+	@mkdir -p build
+	cp $< $@
 
 clean:
 	rm -rf build
@@ -51,5 +70,5 @@ else
 	find $(TO) -type f | xargs chmod 644
 endif
 
-.PHONY: all ready deps clean install
+.PHONY: all ready deps clean install serve
 
