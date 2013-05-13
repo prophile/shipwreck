@@ -1,0 +1,315 @@
+Grow:
+
+- evolution
+- scale
+  - spore
+  - osmos
+- change
+  - business
+    - simulation
+    - industrial espionage
+  - personal
+- plants
+  - crops
+  - food
+  - (vs zombies)
+  - ecosystems
+- growth (horror?)
+- sprout
+- crescendo
+
+Gameplay: TD?
+          1D Chaser?
+          2D Chaser?
+          Adventure?
+          RPG?
+          Island survival? (+ escape?)
+           - crop management
+           - risk management
+           - a little like Settlers
+
+Options:
+ - island survival
+   - keep population alive
+   - build ships
+   - turn-based building with some goal
+   - resource management
+     - <water>
+       - <well>
+     - raw produce
+       - wheat
+         - wheat farm
+     - food
+       - mill
+         - bread (wheat<, water> ->)
+     - raw materials
+       - iron ore
+         - iron mine
+       - stone
+         - quarry
+       - lumber
+         - woodcutter
+     - refined materials
+       - iron
+         - forge
+       - planks
+         - sawmill
+   - grid map
+   - roads (autobuild)
+   - environment:
+     - water
+     - plains
+     - tree
+     - rocks
+     - rocks + iron
+   - buildings:
+     - headquarters [3x2, non-buildable]
+     - shipyard [3x2 W, 40P, 40S]
+     - forester [2x1, 4P]
+     - iron mine [2x1 at M, 2P, 6S]
+     - quarry [2x1, 6P]
+     - woodcutter [2x1, 3P]
+     - forge [2x2, 2P, 6S]
+     - sawmill [2x2, 6P, 1S]
+     - <well [1x1]>
+     - wheat farm [2x1, 4L]
+     - mill [2x2, 1S, 6L]
+   - steps:
+     - <provide water>
+     - provide food
+     - get planks
+     - get stone
+     - get iron
+     - build shipyard
+     - build ships
+     - escape
+   - assets needed:
+     - BG tiles/entities: 32x32
+     - Icons: 16x16 with common BG
+     - BG tile: water
+     - BG tile: shipwreck
+     - BG tile: plains
+     - BG tile: tree
+     - BG tile: rocks
+     - BG tile: ferrous rocks
+     - FG tile: road N
+     - FG tile: road S
+     - FG tile: road W
+     - FG tile: road E
+     - FG tile: road NW
+     - FG tile: road SW
+     - FG tile: road NE
+     - FG tile: road NW
+     - FG tile: HQ
+     - FG tile: shipyard
+     - FG tile: forester
+     - FG tile: mine
+     - FG tile: quarry
+     - FG tile: woodcutter
+     - FG tile: forge
+     - FG tile: sawmill
+     - FG tile: farm
+     - FG tile: mill
+     - FG sprite: person
+     - Icon: wheat
+     - Icon: bread
+     - Icon: lumber
+     - Icon: planks
+     - Icon: stone
+     - Icon: iron ore
+     - Icon: iron
+     - Icon: ships
+     - Icon: flax
+   - player actions:
+     - build building
+     - demolish building (costs 5 food from HQ)
+     - activate building
+     - deactivate building
+     - deforest (costs 5 food from HQ)
+     - select entity
+       - shows: icon
+       - shows: type
+       - shows: for couriers, destination and source
+       - shows: for building sites, eventual type
+       - shows: progress unless courier or HQ
+       - shows: stockpile
+       - shows: activate/deactivate buttons
+       - shows: demolish button
+     - next turn
+   - entities defined by:
+     - type
+     - position
+     - goods
+   - entity behaviour each turn:
+     - COURIER [source, destination]
+       - path to destination along roads
+       - move up to three spaces closer to destination
+       - if at destination:
+         - unload carried goods to destination
+         - remove
+       - if reach destination and building is no longer there
+         - set destination to source
+         - set source to HQ (to advoid redirection loops)
+     - *BUILDING
+       - when removed
+         - send courier with all goods back to HQ
+       - if goods to ship
+         - take 35% random subset of buildings
+         - order by distance
+         - if deactivated, all goods considered shipping
+         - if any require shipping goods, send courier with min(current, demand + 50%)
+         - if none require shipping goods and random with 30%, ship to headquarters
+     - HEADQUARTERS
+       - demands: 15 food
+       - use one food per turn, if cannot then game is over
+       - if any demand for stored goods (above 15 threshold for food)
+         - send single courier to target
+     - SHIPYARD
+       - demands: 15 food, 18 planks, 6 iron, 8 flax
+       - if progress < 50%
+         - use 3 food, 3 planks, 1 iron to advance
+       - else
+         - use 3 food, 1 plank, 1 iron, 2 flax to advance
+       - if complete, add to ship count and reset
+       - 100 turns to complete
+     - FORESTER
+       - demands: 5 food
+       - use 1 food to advance one
+       - if complete and plains space within 4 MD, change to tree and reset
+       - 4 turns to complete
+     - WOODCUTTER
+       - demands: 5 food
+       - ships: lumber
+       - use 1 food to advance one if tree space within 4 MD
+       - if complete and tree space within 4 MD, change to plains, reset, stockpile 2 lumber
+       - 3 turns to complete
+     - IRON MINE
+       - demands: 10 food
+       - ships: iron
+       - use 2 food to advance one if iron ore within 2 MD
+       - if complete, stockpile 2 iron ore and reset
+       - 5 turns to complete
+     - QUARRY
+       - demands: 5 food
+       - ships: stone
+       - use 1 food to advance one if rocks or iron ore within 2 MD
+       - if complete, stockpile 2 stone and reset
+       - 5 turns to complete
+     - SAWMILL
+       - demands: 5 food, 6 lumber
+       - ships: planks
+       - use 1 lumber, 1 food to advance
+       - if complete, stockpile 6 planks and reset
+       - 6 turns to complete
+     - FORGE
+       - demands: 5 food, 8 iron ore
+       - ships: iron
+       - use 1 food, 1 iron ore to advance
+       - if complete, stockpile 6 iron and reset
+       - 8 turns to complete
+     - FARM
+       - ships: wheat
+       - advance one per adjacent plains
+       - 8 turns to complete with one adjacent plain
+       - if complete, stockpile 3 wheat, (10% chance (nadjplains) flax) and reset
+     - MILL
+       - demands: 5 wheat
+       - ships: food
+       - use 1 wheat to advance
+       - if complete, stockpile 2 food
+       - 2 turns to complete
+     - BUILDING SITE (variable area)
+       - demands: (lumcost planks + stonecost stone) if reachable by road
+       - starts with MATERIALS flag set to false
+       - if lumcost + stonecost met, set MATERIALS flag to true, courier excess to HQ
+       - if MATERIALS flag is set to false
+         - if cannot path on roads to HQ
+           - use 1 stone from HQ to build next 2 road squares to here
+       - advance one if MATERIALS flag is set to true
+       - takes (area) turns to complete
+       - if complete, replace with actual building
+   - tile rendering:
+     - render background tile from map array
+     - if road, pick nearby roads and buildings and display links to them
+     - if entity overlapping, display relevant part of building or courier
+   - on click building icon:
+     - if building selected to be built
+       - unselect
+     - else
+       - select
+   - on click tile:
+     - if entity there
+       - select and bring up dialog box
+     - else
+       - if building selected
+         - try building positionings here, starting with here = top left
+         - if any are found, put down building site
+         - otherwise, beep
+   - on left, right, up, down:
+     - pan map if not at border
+   - on space or advance button:
+     - next turn
+   - map is 300 x 300
+   - additional dialogs:
+     - welcome
+     - died
+     - a winner is you (after 3 ships built)
+   - buildings available to build:
+     - FARM: always
+     - MILL: after first FARM
+     - FORESTER: after first MILL
+     - WOODCUTTER: after first MILL
+     - SAWMILL: after first MILL
+     - QUARRY: after first SAWMILL
+     - IRON MINE: after first QUARRY
+     - FORGE: after first QUARRY
+     - SHIPYARD: after first FORGE
+   - stochastic generation:
+     - use simplex noise [1] (low-freq) for oceans + rocks, variable tolerance means that edge is all ocean
+     - use simplex noise [2] (low-freq) for biomes - use for tree density (shortened down for percent chance of trees)
+     - for all rocks tiles, 5% chance of becoming iron
+     - pick locations randomly until one is found with:
+       - space for an HQ (trees / plains, replace trees with plains)
+       - within 5 of water
+     - pick nearest water block and replace with shipwreck
+ - tower defence
+
+Balance constants:
+ - 
+
+Implementation:
+ - CoffeeScript (done in Browser)
+ - jQuery + Raphael + Bootstrap
+ - Bacon.js
+ - Balance constants in a single JSON file
+ - Spritesheet system
+ - Client-local storage for save/load
+ - Entirely static on the server-side
+ - Game state entirely kept in JSON:
+   - camera target [x, y]
+   - background rows:
+     - background columns:
+       integer value
+       0x00 = water
+       0x01 = plains
+       0x02 = trees
+       0x03 = rocks
+       0x04 = iron
+       0x05 = shipwreck
+       0x06 = plains with road
+   - number of built ships
+   - entity list
+     for each:
+       - type (str)
+       - top left [x, y]
+       - stockpiles (obj type => number)
+       - progress
+       - for COURIERS:
+         - source [x, y, w, h]
+         - destination [x, y, w, h]
+       - for building sites:
+         - size [w, h]
+         - next_type
+       - for all but HQ and COURIER:
+         - active: bool
+
