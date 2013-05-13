@@ -1,12 +1,16 @@
 TO=nowhere
-MODULES=hello
+MODULES=hello constants
 
-all: build/index.html build/shipwreck-version build/wreck.js build/style.css
+all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json
 
 ready: all deps
 
 serve:
 	@cd build ; python3 -m http.server 51428
+
+build/constants.json: constants.json
+	@mkdir -p build
+	cat $^ > $@
 
 build/style.css: obj/deps/bootstrap.css
 	cat $^ > $@
