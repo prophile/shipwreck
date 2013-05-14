@@ -9,10 +9,20 @@ $ ->
 
   cameraInfo = cameraInfo.skipDuplicates _.isEqual
 
-  gridDisplay = Bacon.never().toProperty [
-    [['bg_water'], ['bg_water'], ['bg_shipwreck'], ['bg_water']],
-    [['bg_water'], ['bg_plains'], ['bg_plains'], ['bg_water']],
-    [['bg_water'], ['bg_water'], ['bg_water'], ['bg_water']]]
+  gridDisplay = environment.map((env) ->
+    for row in env
+      for cell in row
+        switch cell
+          when 0 then ['bg_water']
+          when 1 then ['bg_plains']
+          when 2 then ['bg_tree']
+          when 3 then ['bg_shipwreck']
+          when 4 then ['bg_stone']
+          when 5 then ['bg_iron']
+          when 6 then ['bg_plains'] # roads
+          else ['unknown'])
+
+  gridDisplay.onValue (x) -> console.log x
 
   clicks = cameraInfo.flatMapLatest (info) ->
     {camWidth, camHeight} = info
@@ -25,3 +35,13 @@ $ ->
   clicks.onValue (pos) ->
     [x, y] = pos
     console.log "Click at #{x}, #{y}"
+
+  GameState.start
+    world: [
+      [0, 0, 0, 0, 0, 0],
+      [0, 1, 2, 1, 0, 0],
+      [0, 1, 1, 2, 1, 0],
+      [0, 3, 1, 1, 4, 0],
+      [0, 0, 2, 1, 5, 0],
+      [0, 0, 0, 2, 4, 0],
+      [0, 0, 0, 0, 0, 0]]
