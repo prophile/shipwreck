@@ -12,4 +12,5 @@ Save.load.onValue ->
 $ ->
   Save.save.plug ($('#opt-save').asEventStream 'click')
   Save.load.plug ($('#opt-load').asEventStream 'click')
+  GenerateMap.plug ($('#opt-new').asEventStream 'click')
 
