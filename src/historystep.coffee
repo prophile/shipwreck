@@ -14,7 +14,7 @@ $ ->
         object = prevElement
       else
         object = $('<li>')
-        $('#history').append(object)
+        $('#history').prepend(object)
         prevElementCount = 0
       prevElementCount += 1
       object.text "#{prevElementCount} x #{type} "
