@@ -32,6 +32,7 @@ genMapCommand.onValue ->
 generateMap = mapParameters.sampledBy(genMapCommand.delay(100))
 
 generateMap.onValue (params) ->
+  console.log "Generating a map!"
   grid = ((2 for w in [0..params.width-1]) for h in [0..params.height-1])
   waterSource = new SimplexNoise
   biomeSource1 = new SimplexNoise
