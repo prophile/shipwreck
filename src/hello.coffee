@@ -9,6 +9,7 @@ $ ->
   cameraInfo = Bacon.combineTemplate
     camWidth: K('camera_width')
     camHeight: K('camera_height')
+    offscreenTile: K('tile_offscreen')
 
   cameraInfo = cameraInfo.skipDuplicates _.isEqual
 
@@ -28,7 +29,7 @@ $ ->
   gridDisplay.onValue (x) -> console.log x
 
   clicks = cameraInfo.flatMapLatest (info) ->
-    {camWidth, camHeight} = info
+    {camWidth, camHeight, offscreenTile} = info
     sources = (for row in [0..camHeight-1]
       for col in [0..camWidth-1]
         do (row, col) ->
@@ -38,7 +39,7 @@ $ ->
           intermediate.map (x) ->
             {grid, target} = x
             [tx, ty] = target
-            grid[row + ty]?[col + tx] ? ['unknown'])
+            grid[row + ty]?[col + tx] ? [offscreenTile])
     GridView '#tiles', sources
 
   clicks.onValue (pos) ->

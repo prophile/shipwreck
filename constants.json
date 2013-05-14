@@ -103,6 +103,7 @@
     "bg_shipwreck": [160, 0, 32, 32],
     "fg_dude": [32, 224, 32, 32],
     "unknown": [0, 224, 32, 32]
-  }
+  },
+  "tile_offscreen": "bg_water"
 }
 
