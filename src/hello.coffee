@@ -68,15 +68,26 @@ $ ->
   bindMotion Keys.left, -1, 0
   bindMotion Keys.right, 1, 0
 
-  # simple terrain creation
-  cameraTopLeft.sampledBy(clicks, (cam, click) ->
+  # clear options on click
+  Command.select.plug clicks.debounce(100)
+
+  target = cameraTopLeft.sampledBy(clicks, (cam, click) ->
     [cam[0] + click[0], cam[1] + click[1]])
-               .onValue (pos) ->
-                  GameState.mutate "deforestation", (state) ->
-                    return unless pos[0] >= 0
-                    return unless pos[1] >= 0
-                    return unless pos[1] < state.world.length
-                    return unless pos[0] < state.world[pos[1]].length
-                    return unless state.world[pos[1]][pos[0]] is 2
-                    state.world[pos[1]][pos[0]] = 1
+  inBounds = (pos, state) ->
+    return false unless pos[0] >= 0
+    return false unless pos[1] >= 0
+    return false unless pos[1] < state.world.length
+    return false unless pos[1] < state.world[pos[1]].length
+    true
+
+  clicksInMode = (mode) ->
+    inMode = Command.mode.map((x) -> x is mode)
+    Utils.under(target, inMode)
+
+  # deforestation
+  clicksInMode('deforest').onValue (pos) ->
+    GameState.mutate "deforestation", (state) ->
+      return unless inBounds pos, state
+      return unless state.world[pos[1]][pos[0]] is 2
+      state.world[pos[1]][pos[0]] = 1
 

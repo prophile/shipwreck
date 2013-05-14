@@ -1,5 +1,5 @@
 TO=nowhere
-MODULES=keyboard constants gamestate gridview hello
+MODULES=utils keyboard constants gamestate gridview command hello
 MODE=debug
 
 all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json build/spritesheet.png
