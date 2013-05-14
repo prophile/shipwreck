@@ -58,7 +58,13 @@ $ ->
       [0, 0, 0, 0, 0, 0]]
 
   # dat mutation?
-  Keys.down.onValue ->
-    GameState.mutate "camera motion", (state) ->
-      state.camera[0] += 1
+  bindMotion = (key, x, y) ->
+    key.onValue ->
+      GameState.mutate "camera motion", (state) ->
+        state.camera[0] += x
+        state.camera[1] += y
+  bindMotion Keys.down, 0, 1
+  bindMotion Keys.up, 0, -1
+  bindMotion Keys.left, -1, 0
+  bindMotion Keys.right, 1, 0
 
