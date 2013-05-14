@@ -3,6 +3,8 @@ $ ->
 
   environment = GameState.state.map((x) -> x.world)
 
+  cameraTopLeft = GameState.state.map((x) -> x.camera)
+
   cameraInfo = Bacon.combineTemplate
     camWidth: K('camera_width')
     camHeight: K('camera_height')
@@ -29,7 +31,13 @@ $ ->
     sources = (for row in [0..camHeight-1]
       for col in [0..camWidth-1]
         do (row, col) ->
-          gridDisplay.map((x) -> x[row]?[col] ? ['unknown']))
+          intermediate = Bacon.combineTemplate
+            grid: gridDisplay
+            target: cameraTopLeft
+          intermediate.map (x) ->
+            {grid, target} = x
+            [tx, ty] = target
+            grid[row + ty]?[col + tx] ? ['unknown'])
     GridView '#tiles', sources
 
   clicks.onValue (pos) ->
@@ -37,6 +45,7 @@ $ ->
     console.log "Click at #{x}, #{y}"
 
   GameState.start
+    camera: [0, 0]
     world: [
       [0, 0, 0, 0, 0, 0],
       [0, 1, 2, 1, 0, 0],
