@@ -1,6 +1,5 @@
 window.EntityTypes =
   hq: (instance, state) ->
-    instance.pos[0] += 1
     true
 
 window.RunTick = new Bacon.Bus
