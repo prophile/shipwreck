@@ -7,6 +7,8 @@ GameState.state
          .onValue((state) -> window.localStorage['WRECK_SAVE'] = JSON.stringify(state))
 
 Save.load.onValue ->
+  value = window.localStorage['WRECK_SAVE']
+  return unless value?
   GameState.start JSON.parse(window.localStorage['WRECK_SAVE'])
 
 $ ->
