@@ -4,6 +4,7 @@ $ ->
   environment = GameState.state.map((x) -> x.world)
 
   cameraTopLeft = GameState.state.map((x) -> x.camera)
+  cameraTopLeft.onValue (x) -> console.log "Camera", x
 
   cameraInfo = Bacon.combineTemplate
     camWidth: K('camera_width')
@@ -54,3 +55,9 @@ $ ->
       [0, 0, 2, 1, 5, 0],
       [0, 0, 0, 2, 4, 0],
       [0, 0, 0, 0, 0, 0]]
+
+  # dat mutation?
+  Keys.down.onValue ->
+    GameState.mutate "camera motion", (state) ->
+      state.camera[0] += 1
+
