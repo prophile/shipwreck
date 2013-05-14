@@ -2,12 +2,16 @@ TO=nowhere
 MODULES=hello constants gamestate
 MODE=debug
 
-all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json
+all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json build/spritesheet.png
 
 ready: all deps
 
 serve:
 	@cd build ; python3 -m http.server 51428
+
+build/spritesheet.png: sprites.png
+	@mkdir -p build
+	cat $^ > $@
 
 build/constants.json: constants.json
 	@mkdir -p build
