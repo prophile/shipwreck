@@ -71,8 +71,13 @@ $ ->
   # clear options on click
   Command.select.plug clicks.debounce(100)
 
-  target = cameraTopLeft.sampledBy(clicks, (cam, click) ->
-    [cam[0] + click[0], cam[1] + click[1]])
+  cameraTargetInfo = Bacon.combineTemplate
+    topLeft: cameraTopLeft
+    offset: K('camera_offset')
+  target = cameraTargetInfo.sampledBy(clicks, (cam, click) ->
+    {topLeft, offset} = cam
+    [topLeft[0] + offset[0] + click[0],
+     topLeft[1] + offset[1] + click[1]])
   inBounds = (pos, state) ->
     return false unless pos[0] >= 0
     return false unless pos[1] >= 0
@@ -88,6 +93,6 @@ $ ->
   clicksInMode('deforest').onValue (pos) ->
     GameState.mutate "deforestation", (state) ->
       return unless inBounds pos, state
-      return unless state.world[pos[1]][pos[0]] is 2
+      #return unless state.world[pos[1]][pos[0]] is 2
       state.world[pos[1]][pos[0]] = 1
 
