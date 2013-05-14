@@ -97,9 +97,23 @@ generateMap.onValue (params) ->
       continue if getGrid(x, y) isnt 3
       if Math.random() < params.ironChance
         grid[y][x] = 4
+  hq =
+    type: "hq"
+    pos: [6, 6]
+    sprites: [["fg_hq_00", "fg_hq_10", "fg_hq_20"],
+              ["fg_hq_01", "fg_hq_11", "fg_hq_21"]]
+    stock:
+      food: 300
+      flax: 0
+      lumber: 0
+      planks: 0
+      stone: 0
+      iron: 0
+      ore: 0
   GameState.start
     camera: [0, 0]
     world: grid
+    entities: [hq]
 
 window.GenerateMap = genMapCommand
 

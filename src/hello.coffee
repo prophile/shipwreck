@@ -1,8 +1,6 @@
 $ ->
   console.log "Hello, world!"
 
-  environment = GameState.state.map((x) -> x.world)
-
   cameraTopLeft = GameState.state.map((x) -> x.camera)
   cameraTopLeft.onValue (x) -> console.log "Camera", x
 
@@ -13,10 +11,10 @@ $ ->
 
   cameraInfo = cameraInfo.skipDuplicates _.isEqual
 
-  gridDisplay = environment.map((env) ->
-    for row in env
-      for cell in row
-        switch cell
+  gridDisplay = GameState.state.map((state) ->
+    for row, rowIndex in state.world
+      for cell, cellIndex in row
+        basis = switch cell
           when 0 then ['bg_water']
           when 1 then ['bg_plains']
           when 2 then ['bg_tree']
@@ -24,7 +22,17 @@ $ ->
           when 4 then ['bg_iron']
           when 5 then ['bg_shipwreck']
           when 6 then ['bg_plains'] # roads
-          else ['unknown'])
+          else ['unknown']
+        # dig out entities
+        for entity in state.entities
+          [ex, ey] = entity.pos
+          for entityRow, entityRowIndex in entity.sprites
+            for entityCell, entityColIndex in entityRow
+              if _.isEqual([cellIndex, rowIndex],
+                           [ex + entityColIndex,
+                            ey + entityRowIndex])
+                basis.push entityCell
+        basis)
 
   gridDisplay.onValue (x) -> console.log x
 
@@ -47,17 +55,6 @@ $ ->
     console.log "Click at #{x}, #{y}"
 
   GenerateMap.push true
-
-  #GameState.start
-  #  camera: [0, 0]
-  #  world: [
-  #    [0, 0, 0, 0, 0, 0],
-  #    [0, 1, 2, 1, 0, 0],
-  #    [0, 1, 1, 2, 1, 0],
-  #    [0, 3, 1, 1, 4, 0],
-  #    [0, 0, 2, 1, 5, 0],
-  #    [0, 0, 0, 2, 4, 0],
-  #    [0, 0, 0, 0, 0, 0]]
 
   # dat mutation?
   bindMotion = (key, x, y) ->
