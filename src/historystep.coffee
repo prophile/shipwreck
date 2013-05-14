@@ -18,7 +18,7 @@ $ ->
         $('#history').prepend(object)
         prevElementCount = 0
       prevElementCount += 1
-      object.text "#{prevElementCount} x #{type} "
+      object.text "#{prevElementCount} × #{type} "
       restoreLink = $('<a href="#">')
       restoreLink.text 'restore'
       do (elPosition) ->
