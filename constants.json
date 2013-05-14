@@ -94,6 +94,7 @@
   "initial_iron": 0,
   "initial_ships": 0,
   "initial_planks": 40,
+  "initial_flax": 0,
   "sprites": {
     "bg_water": [0, 0, 32, 32],
     "bg_plains": [32, 0, 32, 32],
