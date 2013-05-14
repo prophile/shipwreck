@@ -1,8 +1,10 @@
 under = (stream, property) ->
-  Bacon.combineAsArray(stream, property)
-       .filter((x) -> x[1])
-       .map((x) -> x[0])
-       .changes()
+  # a horrible hack, admittedly
+  outputBus = new Bacon.Bus
+  isLive = false
+  property.onValue (x) ->
+    isLive = x
+  stream.filter(-> isLive)
 
 window.Utils =
   under: under
