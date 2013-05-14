@@ -20,9 +20,11 @@ mapParameters = Bacon.combineTemplate
   simplexWater: percentage K('water_simplex_scale')
   continentRatio: percentage K('continent_ratio')
   borderWidth: K('border_width')
-  #hqWaterDistance: K('hq_water_distance')
+  hqWaterDistance: K('hq_water_distance')
   width: K('map_width')
   height: K('map_height')
+  camWidth: K('camera_width')
+  camHeight: K('camera_height')
 
 mapParameters.onValue (params) ->
   console.log "Mapgen params: ", params
@@ -98,9 +100,40 @@ generateMap.onValue (params) ->
       continue if getGrid(x, y) isnt 3
       if Math.random() < params.ironChance
         grid[y][x] = 4
+  # Step 6: find a location for HQ
+  hqLocation = null
+  for n in [0..100]
+    location = [params.borderWidth + Math.floor(Math.random() * params.width - 2*params.borderWidth),
+                params.borderWidth + Math.floor(Math.random() * params.height - 2*params.borderWidth)]
+    # Validity conditions:
+    #   1: entirely on land [all tiles are tree/plains]
+    #   2: nearby water
+    console.log "Trying: ", location[0], location[1]
+    if _.any(_.flatten(for x in [location[0]..location[0]+2]
+      for y in [location[1]..location[1]+1]
+        (getGrid(x, y) is 0)))
+      console.log "Failed: not entirely land"
+      continue
+    selectedWater = null
+    for x in [location[0]-params.hqWaterDistance..location[0]+2+params.hqWaterDistance]
+      for y in [location[1]-params.hqWaterDistance..location[1]+1+params.hqWaterDistance]
+        if getGrid(x, y) is 0
+          selectedWater = [x, y]
+          break
+    if not selectedWater?
+      console.log "Failed: no nearby water"
+      continue
+    console.log "Done"
+    grid[selectedWater[1]][selectedWater[0]] = 5
+    hqLocation = location
+    break
+  unless hqLocation?
+    console.log 'Map generation failure: guessing HQ'
+    hqLocation = [10, 10]
+
   hq =
     type: "hq"
-    pos: [6, 6]
+    pos: hqLocation
     sprites: [["fg_hq_00", "fg_hq_10", "fg_hq_20"],
               ["fg_hq_01", "fg_hq_11", "fg_hq_21"]]
     stock:
@@ -112,7 +145,8 @@ generateMap.onValue (params) ->
       iron: 0
       ore: 0
   GameState.start
-    camera: [0, 0]
+    camera: [hqLocation[0] - ((params.camWidth - 1) / 2),
+             hqLocation[1] - ((params.camHeight - 1) / 2)]
     world: grid
     entities: [hq]
 

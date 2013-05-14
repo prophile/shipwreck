@@ -88,7 +88,7 @@
   "tree_chance": 40,
   "continent_ratio": 88,
   "border_width": 3,
-  "hq_water_distance": 4,
+  "hq_water_distance": 2,
   "initial_lumber": 0,
   "initial_food": 100,
   "initial_stone": 20,
