@@ -1,4 +1,5 @@
 $ ->
+  $('#reload-consts').on 'click', ReloadK
   sources = Bacon.combineTemplate
     history: GameState.history
     position: GameState.historicalPosition
