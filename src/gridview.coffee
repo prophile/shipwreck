@@ -30,6 +30,10 @@ window.GridView = (element, cells) ->
   clicks = DownLocation.sampledBy(UpClick, (down, up) -> [down, up])
                        .filter((x) -> _.isEqual(x[0], x[1]))
                        .map((x) -> x[0])
+                       .filter((x) -> (x[0] >= 0 and
+                                       x[1] >= 0 and
+                                       x[0] < width and
+                                       x[1] < height))
 
   for r in [0..height-1]
     for c in [0..width-1]
