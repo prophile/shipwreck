@@ -48,7 +48,7 @@ window.GridView = (element, cells) ->
             [sx, sy, sw, sh] = sprites[element] ? sprites['unknown']
             context.drawImage spritesheet,
                               sx, sy, sw, sh,
-                              r*CELL_SIZE, c*CELL_SIZE,
+                              c*CELL_SIZE, r*CELL_SIZE,
                               CELL_SIZE, CELL_SIZE
 
   clicks
