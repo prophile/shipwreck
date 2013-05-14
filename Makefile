@@ -2,12 +2,15 @@ TO=nowhere
 MODULES=utils keyboard constants gamestate save gridview mapgen command hello historystep
 MODE=debug
 
-all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json build/spritesheet.png
+all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json build/spritesheet.png build/favicon.ico
 
 ready: all deps
 
 serve:
 	@cd build ; python3 -m http.server 51428
+
+build/favicon.ico: sprites.png
+	touch $@
 
 build/spritesheet.png: sprites.png
 	@mkdir -p build
