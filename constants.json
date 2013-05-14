@@ -105,6 +105,6 @@
     "unknown": [0, 224, 32, 32]
   },
   "tile_offscreen": "bg_water",
-  "camera_offset": [-2, -1]
+  "camera_offset": [-1, -1]
 }
 
