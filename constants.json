@@ -93,6 +93,16 @@
   "initial_ore": 0,
   "initial_iron": 0,
   "initial_ships": 0,
-  "initial_planks": 40
+  "initial_planks": 40,
+  "sprites": {
+    "bg_water": [0, 0, 32, 32],
+    "bg_plains": [32, 0, 32, 32],
+    "bg_tree": [64, 0, 32, 32],
+    "bg_stone": [96, 0, 32, 32],
+    "bg_iron": [128, 0, 32, 32],
+    "bg_shipwreck": [160, 0, 32, 32],
+    "fg_dude": [32, 224, 32, 32],
+    "unknown": [0, 224, 32, 32]
+  }
 }
 
