@@ -5,7 +5,7 @@
     |____/|_| |_|_| .__/ \_/\_/ |_|  \___|\___|_|\_\
                   |_|
 
-Shipwreck v0.0.4
+Shipwreck v0.0.5
 ================
 
 A game by Alistair Lynn.
@@ -17,7 +17,7 @@ Roadmap
 * **0.0.2** -- basic grid display from spritesheet
 * **0.0.3** -- grid integration with game state, panning
 * **0.0.4** -- simple deforestation (no cost)
-* 0.0.5 -- state stepping display in debug mode
+* **0.0.5** -- state stepping display in debug mode
 * 0.0.6 -- map generation from simplex noise
 * 0.0.7 -- save/load, new game
 * 0.0.8 -- new building: HQ (plus generation with shipwreck)
