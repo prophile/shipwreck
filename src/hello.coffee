@@ -20,9 +20,9 @@ $ ->
           when 0 then ['bg_water']
           when 1 then ['bg_plains']
           when 2 then ['bg_tree']
-          when 3 then ['bg_shipwreck']
-          when 4 then ['bg_stone']
-          when 5 then ['bg_iron']
+          when 3 then ['bg_stone']
+          when 4 then ['bg_iron']
+          when 5 then ['bg_shipwreck']
           when 6 then ['bg_plains'] # roads
           else ['unknown'])
 

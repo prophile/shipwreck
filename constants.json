@@ -84,8 +84,9 @@
   "camera_height": 21,
   "win_ships": 3,
   "iron_chance": 5,
-  "continent_ratio": 83,
-  "border_width": 5,
+  "rock_chance": 8,
+  "continent_ratio": 85,
+  "border_width": 3,
   "hq_water_distance": 4,
   "initial_lumber": 0,
   "initial_food": 100,
@@ -107,6 +108,7 @@
   },
   "tile_offscreen": "bg_water",
   "camera_offset": [-1, -1],
-  "water_simplex_scale": 20
+  "water_simplex_scale": 3,
+  "biome_simplex_scale": 6
 }
 

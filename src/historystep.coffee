@@ -1,5 +1,6 @@
 $ ->
   $('#reload-consts').on 'click', ReloadK
+  $('#regen-map').on 'click', -> GenerateMap.push 1
   sources = Bacon.combineTemplate
     history: GameState.history
     position: GameState.historicalPosition

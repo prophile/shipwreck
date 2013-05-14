@@ -12,7 +12,9 @@ mapParameters = Bacon.combineTemplate
   #initialShips: K('initial_ships')
   #initialPlanks: K('initial_planks')
   #initialFlax: K('initial_flax')
-  #ironChance: percentage K('iron_chance')
+  ironChance: percentage K('iron_chance')
+  rockChance: percentage K('rock_chance')
+  simplexBiome: percentage K('biome_simplex_scale')
   simplexWater: percentage K('water_simplex_scale')
   continentRatio: percentage K('continent_ratio')
   borderWidth: K('border_width')
@@ -30,6 +32,7 @@ generateMap = mapParameters.sampledBy(genMapCommand.delay(100))
 generateMap.onValue (params) ->
   grid = ((2 for w in [0..params.width-1]) for h in [0..params.height-1])
   waterSource = new SimplexNoise
+  biomeSource = new SimplexNoise
   getGrid = (x, y) ->
     return 0 if x < 0
     return 0 if y < 0
@@ -44,13 +47,16 @@ generateMap.onValue (params) ->
                                params.height - y - 1)
       waterBias = 0
       if coastDistance <= params.borderWidth
-        waterBias = (coastDistance - 1) / params.borderWidth
+        waterBias = (coastDistance / params.borderWidth)
       else
         waterBias = 1
-      waterThreshold = params.continentRatio * (1 - waterBias)
-      waterLevel = Math.abs(waterSource.noise2D(x * params.simplexWater,
+      console.log "Warning: out of spec bias" unless 0 <= waterBias <= 1
+      waterThreshold = 1 - (waterBias * params.continentRatio)
+      console.log "Warning: out of spec threshold" unless 0 <= waterThreshold <= 1
+      terrainLevel = Math.abs(waterSource.noise2D(x * params.simplexWater,
                                        y * params.simplexWater))
-      grid[y][x] = if waterLevel < waterThreshold then 0 else 1
+      grid[y][x] = if terrainLevel < waterThreshold then 0 else 1
+      #grid[y][x] = Math.floor(waterThreshold * 5)
   # Step 2: erode landform
   grid = (for y in [0..params.height-1]
     for x in [0..params.width-1]
@@ -63,6 +69,16 @@ generateMap.onValue (params) ->
       # include?
       isLand = _.all(elements, (x) -> x is 1)
       if isLand then 1 else 0)
+  # Step 3: generate rocks
+  #for x in [0..params.width-1]
+  #  for y in [0..params.height-1]
+  #    # get biome
+  #    biome = biomeSource.noise2D(x * params.simplexBiome,
+  #                                y * params.simplexBiome)
+  #    isRocky = biome[0] > 0
+  #    if isRocky then
+  #      if Math.random() < rockChance then
+  #        grid[y][x] = 3
   GameState.start
     camera: [0, 0]
     world: grid
