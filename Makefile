@@ -1,5 +1,5 @@
 TO=nowhere
-MODULES=utils keyboard constants gamestate save gridview mapgen command hello historystep
+MODULES=utils keyboard constants gamestate save gridview mapgen command hello historystep tick
 MODE=debug
 
 all: build/index.html build/shipwreck-version build/wreck.js build/style.css build/constants.json build/spritesheet.png build/favicon.ico

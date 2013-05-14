@@ -15,4 +15,5 @@ window.Keys =
   right: getKey 39
   escape: getKey 27
   debug: getKey 68
+  space: getKey 32
 
