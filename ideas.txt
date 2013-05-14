@@ -158,7 +158,7 @@ Options:
          - order by distance
          - if deactivated, all goods considered shipping
          - if any require shipping goods, send courier with min(current, demand + 50%)
-         - if none require shipping goods and random with 30%, ship to headquarters
+         - if none require shipping goods, level > 2*demand, and random with 30%, ship to headquarters
      - HEADQUARTERS
        - demands: 15 food
        - use one food per turn, if cannot then game is over
