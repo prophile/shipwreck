@@ -70,15 +70,46 @@ generateMap.onValue (params) ->
       isLand = _.all(elements, (x) -> x is 1)
       if isLand then 1 else 0)
   # Step 3: generate rocks
-  #for x in [0..params.width-1]
-  #  for y in [0..params.height-1]
-  #    # get biome
-  #    biome = biomeSource.noise2D(x * params.simplexBiome,
-  #                                y * params.simplexBiome)
-  #    isRocky = biome[0] > 0
-  #    if isRocky then
-  #      if Math.random() < rockChance then
-  #        grid[y][x] = 3
+  for x in [0..params.width-1]
+    for y in [0..params.height-1]
+      continue if getGrid(x, y) is 0
+      # get biome
+      biome = biomeSource.noise2D(x * params.simplexBiome,
+                                  y * params.simplexBiome)
+      isRocky = biome[0] > 0
+      isRocky = true
+      if isRocky and Math.random() < params.rockChance
+        grid[y][x] = 3
+  # Step 4: dilate rocks
+  for i in [1, 2]
+    grid = (for y in [0..params.height-1]
+      for x in [0..params.width-1]
+        # collect neighbours
+        elements = [getGrid(x, y),
+                    getGrid(x, y + 1),
+                    getGrid(x, y - 1),
+                    getGrid(x + 1, y),
+                    getGrid(x - 1, y)]
+        # include?
+        nonWater = element for element in elements when element isnt 0
+        isRock = _.any(elements, (x) -> x is 3)
+        if isRock then 3 else getGrid(x, y))
+  grid = (for y in [0..params.height-1]
+    for x in [0..params.width-1]
+      # collect neighbours
+      here = getGrid(x, y)
+      elements = [here,
+                  getGrid(x, y + 1),
+                  getGrid(x, y - 1),
+                  getGrid(x + 1, y),
+                  getGrid(x - 1, y)]
+      # include?
+      nonWater = element for element in elements when element isnt 0
+      isRock = _.all(elements, (x) -> x is 3)
+      if here isnt 3
+        here
+      else
+        if isRock then 3 else 1)
   GameState.start
     camera: [0, 0]
     world: grid
