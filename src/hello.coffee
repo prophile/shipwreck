@@ -72,10 +72,11 @@ $ ->
   cameraTopLeft.sampledBy(clicks, (cam, click) ->
     [cam[0] + click[0], cam[1] + click[1]])
                .onValue (pos) ->
-                  GameState.mutate "terraforming", (state) ->
+                  GameState.mutate "deforestation", (state) ->
                     return unless pos[0] >= 0
                     return unless pos[1] >= 0
                     return unless pos[1] < state.world.length
                     return unless pos[0] < state.world[pos[1]].length
+                    return unless state.world[pos[1]][pos[0]] is 2
                     state.world[pos[1]][pos[0]] = 1
 
