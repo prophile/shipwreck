@@ -78,13 +78,13 @@
   "mill_cost_stone": 1,
   "mill_cost_planks": 6,
   "site_road_speed": 2,
-  "map_width": 300,
-  "map_height": 300,
+  "map_width": 30,
+  "map_height": 30,
   "camera_width": 21,
   "camera_height": 21,
   "win_ships": 3,
   "iron_chance": 5,
-  "continent_ratio": 95,
+  "continent_ratio": 83,
   "border_width": 5,
   "hq_water_distance": 4,
   "initial_lumber": 0,
@@ -106,6 +106,7 @@
     "unknown": [0, 224, 32, 32]
   },
   "tile_offscreen": "bg_water",
-  "camera_offset": [-1, -1]
+  "camera_offset": [-1, -1],
+  "water_simplex_scale": 20
 }
 

@@ -20,7 +20,7 @@ build/constants.json: constants.json
 build/style.css: obj/deps/bootstrap.css
 	cat $^ > $@
 
-build/wreck.js: obj/deps/jquery.js obj/deps/bootstrap.js obj/deps/bacon.js obj/deps/underscore.js $(MODULES:%=obj/scripts/%.js)
+build/wreck.js: obj/deps/jquery.js obj/deps/bootstrap.js obj/deps/typedarray.js obj/deps/simplex.js obj/deps/bacon.js obj/deps/underscore.js $(MODULES:%=obj/scripts/%.js)
 	@mkdir -p build
 ifeq ($(MODE),debug)
 	cat $^ > $@
@@ -38,6 +38,12 @@ obj/scripts: Makefile
 
 obj/deps: Makefile
 	mkdir -p $@
+
+obj/deps/typedarray.js: obj/deps
+	curl -o $@ 'http://www.calormen.com/polyfill/typedarray.js'
+
+obj/deps/simplex.js: obj/deps
+	curl -o $@ 'https://raw.github.com/jwagner/simplex-noise.js/master/simplex-noise.js'
 
 obj/deps/underscore.js: obj/deps
 	curl -o $@ 'http://underscorejs.org/underscore-min.js'
