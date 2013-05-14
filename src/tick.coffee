@@ -13,5 +13,6 @@ RunTick.onValue ->
       if keep then [entity] else []), true)
 
 $ ->
-  RunTick.plug Keys.space
+  RunTick.plug Keys.space.map(true)
+  RunTick.plug Bacon.repeatedly(5*1000, [false])
 
