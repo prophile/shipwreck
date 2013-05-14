@@ -13,5 +13,5 @@ RunTick.onValue ->
 
 $ ->
   RunTick.plug Keys.space.map(true)
-  RunTick.plug Bacon.repeatedly(5*1000, [false])
+  #RunTick.plug Bacon.repeatedly(5*1000, [false])
 
