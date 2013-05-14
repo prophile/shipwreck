@@ -12,9 +12,11 @@ mapParameters = Bacon.combineTemplate
   #initialShips: K('initial_ships')
   #initialPlanks: K('initial_planks')
   #initialFlax: K('initial_flax')
+  treeChance: percentage K('tree_chance')
   ironChance: percentage K('iron_chance')
-  rockChance: percentage K('rock_chance')
+  rockLevel: percentage K('rock_level')
   simplexBiome: percentage K('biome_simplex_scale')
+  simplexRock: percentage K('rock_simplex_scale')
   simplexWater: percentage K('water_simplex_scale')
   continentRatio: percentage K('continent_ratio')
   borderWidth: K('border_width')
@@ -32,7 +34,8 @@ generateMap = mapParameters.sampledBy(genMapCommand.delay(100))
 generateMap.onValue (params) ->
   grid = ((2 for w in [0..params.width-1]) for h in [0..params.height-1])
   waterSource = new SimplexNoise
-  biomeSource = new SimplexNoise
+  biomeSource1 = new SimplexNoise
+  biomeSource2 = new SimplexNoise
   getGrid = (x, y) ->
     return 0 if x < 0
     return 0 if y < 0
@@ -74,42 +77,26 @@ generateMap.onValue (params) ->
     for y in [0..params.height-1]
       continue if getGrid(x, y) is 0
       # get biome
-      biome = biomeSource.noise2D(x * params.simplexBiome,
-                                  y * params.simplexBiome)
-      isRocky = biome[0] > 0
-      isRocky = true
-      if isRocky and Math.random() < params.rockChance
+      biome = biomeSource1.noise2D(x * params.simplexRock,
+                                   y * params.simplexRock)
+      if biome > params.rockLevel
         grid[y][x] = 3
-  # Step 4: dilate rocks
-  for i in [1, 2]
-    grid = (for y in [0..params.height-1]
-      for x in [0..params.width-1]
-        # collect neighbours
-        elements = [getGrid(x, y),
-                    getGrid(x, y + 1),
-                    getGrid(x, y - 1),
-                    getGrid(x + 1, y),
-                    getGrid(x - 1, y)]
-        # include?
-        nonWater = element for element in elements when element isnt 0
-        isRock = _.any(elements, (x) -> x is 3)
-        if isRock then 3 else getGrid(x, y))
-  grid = (for y in [0..params.height-1]
-    for x in [0..params.width-1]
-      # collect neighbours
-      here = getGrid(x, y)
-      elements = [here,
-                  getGrid(x, y + 1),
-                  getGrid(x, y - 1),
-                  getGrid(x + 1, y),
-                  getGrid(x - 1, y)]
-      # include?
-      nonWater = element for element in elements when element isnt 0
-      isRock = _.all(elements, (x) -> x is 3)
-      if here isnt 3
-        here
-      else
-        if isRock then 3 else 1)
+  # Step 4: generate trees
+  for x in [0..params.width-1]
+    for y in [0..params.height-1]
+      continue if getGrid(x, y) isnt 1
+      # get biome
+      biome = biomeSource2.noise2D(x * params.simplexBiome,
+                                   y * params.simplexBiome)
+      isLeafy = biome < 0
+      if isLeafy and Math.random() < params.treeChance
+        grid[y][x] = 2
+  # Step 5: generate iron
+  for x in [0..params.width-1]
+    for y in [0..params.height-1]
+      continue if getGrid(x, y) isnt 3
+      if Math.random() < params.ironChance
+        grid[y][x] = 4
   GameState.start
     camera: [0, 0]
     world: grid

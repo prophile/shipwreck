@@ -78,13 +78,14 @@
   "mill_cost_stone": 1,
   "mill_cost_planks": 6,
   "site_road_speed": 2,
-  "map_width": 30,
-  "map_height": 30,
+  "map_width": 70,
+  "map_height": 70,
   "camera_width": 21,
   "camera_height": 21,
   "win_ships": 3,
   "iron_chance": 5,
-  "rock_chance": 1.5,
+  "rock_level": 70,
+  "tree_chance": 40,
   "continent_ratio": 88,
   "border_width": 3,
   "hq_water_distance": 4,
@@ -109,6 +110,7 @@
   "tile_offscreen": "bg_water",
   "camera_offset": [-1, -1],
   "water_simplex_scale": 3,
-  "biome_simplex_scale": 6
+  "biome_simplex_scale": 10,
+  "rock_simplex_scale": 15
 }
 
