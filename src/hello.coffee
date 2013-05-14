@@ -68,3 +68,14 @@ $ ->
   bindMotion Keys.left, -1, 0
   bindMotion Keys.right, 1, 0
 
+  # simple terrain creation
+  cameraTopLeft.sampledBy(clicks, (cam, click) ->
+    [cam[0] + click[0], cam[1] + click[1]])
+               .onValue (pos) ->
+                  GameState.mutate "terraforming", (state) ->
+                    return unless pos[0] >= 0
+                    return unless pos[1] >= 0
+                    return unless pos[1] < state.world.length
+                    return unless pos[0] < state.world[pos[1]].length
+                    state.world[pos[1]][pos[0]] = 1
+

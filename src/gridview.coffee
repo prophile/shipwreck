@@ -19,13 +19,13 @@ window.GridView = (element, cells) ->
 
   eventToPosition = (x) ->
     [Math.floor(x.clientX / CELL_SIZE),
-     Math.floor(x.clientY / CELL_SIZE)]
+     Math.floor(x.clientY / CELL_SIZE) - 1]
 
   DownClick = element.asEventStream('mousedown')
                      .map(eventToPosition)
   UpClick = element.asEventStream('mouseup')
                    .map(eventToPosition)
-  DownLocation = DownClick.merge(UpClick.map(null))
+  DownLocation = DownClick.merge(UpClick.map(null).delay(0))
                           .toProperty(null)
   clicks = DownLocation.sampledBy(UpClick, (down, up) -> [down, up])
                        .filter((x) -> _.isEqual(x[0], x[1]))
