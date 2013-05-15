@@ -4,14 +4,14 @@ percentage = (x) ->
   x.map((x) -> x / 100)
 
 mapParameters = Bacon.combineTemplate
-  #initialFood: K('initial_food')
-  #initialLumber: K('initial_lumber')
-  #initialStone: K('initial_stone')
-  #initialOre: K('initial_ore')
-  #initialIron: K('initial_iron')
+  initialFood: K('initial_food')
+  initialLumber: K('initial_lumber')
+  initialStone: K('initial_stone')
+  initialOre: K('initial_ore')
+  initialIron: K('initial_iron')
   #initialShips: K('initial_ships')
-  #initialPlanks: K('initial_planks')
-  #initialFlax: K('initial_flax')
+  initialPlanks: K('initial_planks')
+  initialFlax: K('initial_flax')
   treeChance: percentage K('tree_chance')
   ironChance: percentage K('iron_chance')
   rockLevel: percentage K('rock_level')
@@ -125,13 +125,13 @@ generateMap.onValue (params) ->
     sprites: [["fg_hq_00", "fg_hq_10", "fg_hq_20"],
               ["fg_hq_01", "fg_hq_11", "fg_hq_21"]]
     stock:
-      food: 300
-      flax: 0
-      lumber: 0
-      planks: 0
-      stone: 0
-      iron: 0
-      ore: 0
+      food: params.initialFood
+      flax: params.initialFlax
+      lumber: params.initialLumber
+      planks: params.initialPlanks
+      stone: params.initialStone
+      iron: params.initialIron
+      ore: params.initialOre
   GameState.start
     camera: [hqLocation[0] - ((params.camWidth - 1) / 2),
              hqLocation[1] - ((params.camHeight - 1) / 2)]
