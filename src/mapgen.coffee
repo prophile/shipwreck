@@ -26,15 +26,9 @@ mapParameters = Bacon.combineTemplate
   camWidth: K('camera_width')
   camHeight: K('camera_height')
 
-mapParameters.onValue (params) ->
-  console.log "Mapgen params: ", params
-genMapCommand.onValue ->
-  console.log "Map gen command received."
-
 generateMap = mapParameters.sampledBy(genMapCommand.delay(100))
 
 generateMap.onValue (params) ->
-  console.log "Generating a map!"
   grid = ((2 for w in [0..params.width-1]) for h in [0..params.height-1])
   waterSource = new SimplexNoise
   biomeSource1 = new SimplexNoise
@@ -56,9 +50,7 @@ generateMap.onValue (params) ->
         waterBias = (coastDistance / params.borderWidth)
       else
         waterBias = 1
-      console.log "Warning: out of spec bias" unless 0 <= waterBias <= 1
       waterThreshold = 1 - (waterBias * params.continentRatio)
-      console.log "Warning: out of spec threshold" unless 0 <= waterThreshold <= 1
       terrainLevel = Math.abs(waterSource.noise2D(x * params.simplexWater,
                                        y * params.simplexWater))
       grid[y][x] = if terrainLevel < waterThreshold then 0 else 1
@@ -108,11 +100,9 @@ generateMap.onValue (params) ->
     # Validity conditions:
     #   1: entirely on land [all tiles are tree/plains]
     #   2: nearby water
-    console.log "Trying: ", location[0], location[1]
     if _.any(_.flatten(for x in [location[0]..location[0]+2]
       for y in [location[1]..location[1]+1]
         (getGrid(x, y) is 0)))
-      console.log "Failed: not entirely land"
       continue
     selectedWater = null
     for x in [location[0]-params.hqWaterDistance..location[0]+2+params.hqWaterDistance]
@@ -121,9 +111,7 @@ generateMap.onValue (params) ->
           selectedWater = [x, y]
           break
     if not selectedWater?
-      console.log "Failed: no nearby water"
       continue
-    console.log "Done"
     grid[selectedWater[1]][selectedWater[0]] = 5
     hqLocation = location
     break

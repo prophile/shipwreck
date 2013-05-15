@@ -1,8 +1,5 @@
 $ ->
-  console.log "Hello, world!"
-
   cameraTopLeft = GameState.state.map((x) -> x.camera)
-  cameraTopLeft.onValue (x) -> console.log "Camera", x
 
   cameraInfo = Bacon.combineTemplate
     camWidth: K('camera_width')
@@ -34,8 +31,6 @@ $ ->
                 basis.push entityCell
         basis)
 
-  gridDisplay.onValue (x) -> console.log x
-
   clicks = cameraInfo.flatMapLatest (info) ->
     {camWidth, camHeight, offscreenTile} = info
     sources = (for row in [0..camHeight-1]
@@ -49,10 +44,6 @@ $ ->
             [tx, ty] = target
             grid[row + ty]?[col + tx] ? [offscreenTile])
     GridView '#tiles', sources
-
-  clicks.onValue (pos) ->
-    [x, y] = pos
-    console.log "Click at #{x}, #{y}"
 
   GenerateMap.push true
 

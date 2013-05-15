@@ -19,12 +19,8 @@ window.GameState =
       [currentHistory, pos] = [x.history, x.pos]
       currentState = currentHistory[pos][1]
       _.defer ->
-        console.log "Transformation: #{description}"
         rawState = JSON.parse(currentState)
         transform rawState
-        # BEGIN DEBUG
-        console.log "Warning: no change!" if _.isEqual rawState, JSON.parse(currentState)
-        # END DEBUG
         newHistory = currentHistory[0..pos]
         newHistory.push [description, JSON.stringify(rawState)]
         history.push newHistory
