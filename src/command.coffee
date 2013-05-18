@@ -46,7 +46,7 @@ $ ->
               .assign $('#opt-demolish').parent(), 'toggleClass', 'active'
   Command.mode.map((x) -> x is 'build')
               .assign $('#opt-build').parent(), 'toggleClass', 'active'
-  for building in ['farm']
+  for building in ['farm', 'mill', 'forester', 'woodcutter', 'sawmill']
     do (building) ->
       key = "#opt-build-#{building}"
       bindButton Command.build, key, building
