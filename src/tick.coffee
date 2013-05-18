@@ -1,6 +1,9 @@
 window.EntityTypes =
   hq: (instance, state) ->
     true
+  farm: (instance, state) ->
+    instance.stock.food += 1
+    true
 
 window.RunTick = new Bacon.Bus
 

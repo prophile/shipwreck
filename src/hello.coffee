@@ -86,3 +86,30 @@ $ ->
       #return unless state.world[pos[1]][pos[0]] is 2
       state.world[pos[1]][pos[0]] = 1
 
+  Command.buildType
+         .sampledBy(clicksInMode('build'), (bT, loc) -> [bT, loc[0], loc[1]])
+         .filter((x) -> x[0]?)
+         .onValues (buildType, x, y) ->
+    GameState.mutate "place building #{buildType}", (state) ->
+      return unless inBounds [x, y], state
+      target = FindSpot state.world, [x, y], [2, 1]
+      if target?
+        state.entities.push
+          type: "farm"
+          pos: target
+          sprites: [["fg_farm_00", "fg_farm_01"]]
+          stock:
+            food: 0
+            wheat: 0
+            flax: 0
+            lumber: 0
+            planks: 0
+            stone: 0
+            iron: 0
+            ore: 0
+          active: true
+        state.world[target[1]][target[0]] = 3
+        state.world[target[1]][target[0]+1] = 3
+      else
+        console.log "No target found!"
+

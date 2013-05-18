@@ -126,6 +126,7 @@ generateMap.onValue (params) ->
               ["fg_hq_01", "fg_hq_11", "fg_hq_21"]]
     stock:
       food: params.initialFood
+      wheat: 0
       flax: params.initialFlax
       lumber: params.initialLumber
       planks: params.initialPlanks
