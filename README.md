@@ -5,7 +5,7 @@
     |____/|_| |_|_| .__/ \_/\_/ |_|  \___|\___|_|\_\
                   |_|
 
-Shipwreck v0.0.8
+Shipwreck v0.0.9
 ================
 
 A game by Alistair Lynn.
@@ -21,7 +21,7 @@ Roadmap
 * **0.0.6** -- map generation from simplex noise
 * **0.0.7** -- save/load, new game
 * **0.0.8** -- new building: HQ (plus generation with shipwreck and game ticks)
-* 0.0.9 -- new building: farm (plus simple immediate build, and stocks)
+* **0.0.9** -- new building: farm (plus simple immediate build, and stocks)
 * 0.0.10 -- building sites and roads
 * 0.0.11 -- couriers and building costs
 * 0.0.12 -- entity selection, building demolition, deforestation costs
